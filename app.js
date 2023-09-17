@@ -26,15 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const levels = [
     {
       level: "easy",
-      tiles: 9,
-    },
-    {
-      level: "medium",
       tiles: 12,
     },
     {
+      level: "medium",
+      tiles: 16,
+    },
+    {
       level: "hard",
-      tiles: 15,
+      tiles: 20,
     },
   ];
 
@@ -55,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const levelButtons = [...levelSelect.querySelectorAll("*")];
-    console.log(levelButtons);
 
     levelButtons.forEach((button) => {
       button.addEventListener("click", (e) => {
@@ -102,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let card = document.createElement("div");
       card.className = "card";
       card.id = "card-" + (i + 1);
-      console.log(card.innerHTML);
       cardsContainer.appendChild(card);
       card.style.height = `${card.offsetWidth}px`;
     }
@@ -114,6 +112,43 @@ document.addEventListener("DOMContentLoaded", () => {
     gameplayContainer.appendChild(backToMenu);
 
     getMemes();
+
+    // -------------- gameplay loop ---------------
+
+    const cards = [...cardsContainer.querySelectorAll("*")];
+
+    let cardCounter = 0;
+    let selectedCard = null;
+
+    cards.forEach((card) => {
+      card.addEventListener("click", (e) => {
+        if (cardCounter === 0) {
+          selectedCard = card;
+          card.querySelector(".overlay-image").style.visibility = "hidden";
+          cardCounter++;
+        } else if (cardCounter === 1) {
+          card.querySelector(".overlay-image").style.visibility = "hidden";
+          if (
+            card.querySelector("img").src ===
+            selectedCard.querySelector("img").src
+          ) {
+            console.log("CARDS MATCH");
+            setTimeout(() => {
+              selectedCard.style.visibility = "hidden";
+              card.style.visibility = "hidden";
+            }, 700);
+          } else {
+            console.log("CARDS DON'T MATCH");
+            setTimeout(() => {
+              card.querySelector(".overlay-image").style.visibility = "visible";
+              selectedCard.querySelector(".overlay-image").style.visibility =
+                "visible";
+            }, 700);
+          }
+          cardCounter = 0;
+        }
+      });
+    });
 
     backToMenu.addEventListener("click", () => {
       gameplayContainer.remove();
@@ -138,19 +173,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function displayMeme(memes) {
     // Create an img element
-    
+
     const cards = document.querySelectorAll(".card");
 
     // Set the src attribute to the meme URL
-    
+    let memeArray = [];
+    for (let i = 0; i < cards.length / 2; i++) {
+      let randomMeme = memes[Math.floor(Math.random() * memes.length)].url;
+      memeArray.push(randomMeme);
+      memeArray.push(randomMeme);
+    }
+
+    memeArray = shuffleArray(memeArray);
 
     // Clear the previous meme (if any) and append the new one
-    [...cards].forEach((card) => {
-        console.log(card)
-        const imgElement = document.createElement("img");
-        imgElement.src = memes[Math.floor(Math.random() * memes.length)].url;
-        card.appendChild(imgElement);
-    })
-    
+    [...cards].forEach((card, index) => {
+      const imgElement = document.createElement("img");
+      const imgOverlay = document.createElement("img");
+
+      imgOverlay.src =
+        "https://www.clarelewisillustration.co.uk/wp-content/uploads/Repeating-Pattern-Illustrator-3.jpg";
+      imgOverlay.className = "overlay-image";
+      card.appendChild(imgElement);
+      card.appendChild(imgOverlay);
+      setTimeout(() => {
+        imgElement.src = memeArray[index];
+      }, 500);
+    });
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // Generate a random index between 0 and i
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
+    }
+    return array;
   }
 });
