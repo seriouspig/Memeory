@@ -236,11 +236,11 @@ document.addEventListener("DOMContentLoaded", () => {
       [
         {
           animal: "a dolphin",
-          url: "https://pbs.twimg.com/profile_images/603061085571190784/rOwJSIIi_400x400.jpg",
+          url: "https://i.pinimg.com/originals/51/89/e5/5189e56b9b05f2d1ec7e50a9d80967bc.gif",
         },
         {
           animal: "an elephant",
-          url: "https://i.ytimg.com/vi/SNggmeilXDQ/mqdefault.jpg",
+          url: "https://media0.giphy.com/media/SWKyABQ08mbXW/giphy.gif",
         },
       ],
       [
@@ -250,17 +250,17 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
           animal: "a squirrel",
-          url: "https://media.istockphoto.com/id/104096920/photo/squirrel-holding-nuts-on-grassy-field.jpg?s=612x612&w=0&k=20&c=CkFiiKgCKmixgex4MhDjvcMYSHePrSf5MvD7LOgE2Ak=",
+          url: "https://media.tenor.com/K5JQtffUHiUAAAAC/squirrel-nuts.gif",
         },
       ],
       [
         {
           animal: "a sloth",
-          url: "https://t3.ftcdn.net/jpg/02/87/25/08/360_F_287250814_wh4XAUalwgqlnLvCWEdTLf4C3qBPjeHW.jpg",
+          url: "https://media1.giphy.com/media/VK0qcnl18fk4g/giphy.gif",
         },
         {
           animal: "a chimpanzee",
-          url: "https://cdn.pixabay.com/photo/2018/09/25/21/32/monkey-3703230_1280.jpg",
+          url: "https://i.pinimg.com/originals/1c/81/31/1c8131f1d3cdf7cf3301ea5ebe6f93c6.gif",
         },
       ],
     ];
@@ -273,11 +273,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let animalCategory;
     let textResult;
 
-    if (result <= 1) {
+    if (result <= 0.8) {
       console.log("RESULT: GOOD");
       textResult = "pretty good";
       animalCategory = 0;
-    } else if (result > 1 && result < 1.2) {
+    } else if (result > 0.8 && result < 1) {
       console.log("RESULT: MEDIUM");
       textResult = "pretty average";
       animalCategory = 1;
@@ -289,21 +289,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log(animals[animalCategory]);
 
-    const resultText = document.createElement("div");
-    resultText.className = "result-text";
-    resultText.innerHTML = `You uncovered ${numberOfTiles} cards in ${movesUsed} moves. That is ${textResult}. You have a memory of ${
+    let chosenAnimal =
       animals[animalCategory][
         Math.floor(Math.random() * animals[animalCategory].length)
-      ].animal
-    }`;
+      ];
+
+    const resultText = document.createElement("div");
+    resultText.className = "result-text";
+    resultText.innerHTML = `You uncovered ${numberOfTiles} cards in ${movesUsed} moves. That is ${textResult}. You have a memory of ${chosenAnimal.animal}`;
     console.log(resultText.innerHTML);
 
     const resultImg = document.createElement("img");
     resultImg.className = "result-img";
-    resultImg.src =
-      animals[animalCategory][
-        Math.floor(Math.random() * animals[animalCategory].length)
-      ].url;
+    resultImg.src = chosenAnimal.url;
 
     congratulations.appendChild(resultImg);
     congratulations.appendChild(resultText);
