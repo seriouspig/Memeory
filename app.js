@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gameplayContainer.appendChild(cardsContainer);
     cardsContainer.style.display = "flex";
 
-    choose.innerHTML = "Discover all the memes";
+    choose.innerHTML = "Moves Used: 0";
 
     // Find the level object that matches the provided levelName
     const level = levels.find((l) => l.level === levelName);
@@ -119,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let cardCounter = 0;
     let selectedCard = null;
+    let movesUsed = 0;
 
     cards.forEach((card) => {
       card.addEventListener("click", (e) => {
@@ -126,8 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
           selectedCard = card;
           card.querySelector(".overlay-image").style.visibility = "hidden";
           cardCounter++;
-        } else if (cardCounter === 1) {
+        } else if (cardCounter === 1 && card !== selectedCard) {
           card.querySelector(".overlay-image").style.visibility = "hidden";
+          cardCounter++
           if (
             card.querySelector("img").src ===
             selectedCard.querySelector("img").src
@@ -136,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
               selectedCard.style.visibility = "hidden";
               card.style.visibility = "hidden";
+              cardCounter = 0;
             }, 700);
           } else {
             console.log("CARDS DON'T MATCH");
@@ -143,9 +146,12 @@ document.addEventListener("DOMContentLoaded", () => {
               card.querySelector(".overlay-image").style.visibility = "visible";
               selectedCard.querySelector(".overlay-image").style.visibility =
                 "visible";
+                cardCounter = 0;
             }, 700);
           }
-          cardCounter = 0;
+          movesUsed ++;
+          choose.innerHTML = "Moves Used: " + movesUsed;
+
         }
       });
     });
