@@ -120,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let cardCounter = 0;
     let selectedCard = null;
     let movesUsed = 0;
+    let cardsLeft = cards.length;
 
     cards.forEach((card) => {
       card.addEventListener("click", (e) => {
@@ -129,12 +130,13 @@ document.addEventListener("DOMContentLoaded", () => {
           cardCounter++;
         } else if (cardCounter === 1 && card !== selectedCard) {
           card.querySelector(".overlay-image").style.visibility = "hidden";
-          cardCounter++
+          cardCounter++;
           if (
             card.querySelector("img").src ===
             selectedCard.querySelector("img").src
           ) {
             console.log("CARDS MATCH");
+            cardsLeft -= 2;
             setTimeout(() => {
               selectedCard.style.visibility = "hidden";
               card.style.visibility = "hidden";
@@ -146,12 +148,17 @@ document.addEventListener("DOMContentLoaded", () => {
               card.querySelector(".overlay-image").style.visibility = "visible";
               selectedCard.querySelector(".overlay-image").style.visibility =
                 "visible";
-                cardCounter = 0;
+              cardCounter = 0;
             }, 700);
           }
-          movesUsed ++;
+          movesUsed++;
           choose.innerHTML = "Moves Used: " + movesUsed;
-
+          console.log(cardsLeft);
+          // Check if all cards are removed and if so call gameOver()
+          if (cardsLeft === 0) {
+            cardsContainer.remove();
+            gameOver(numberOfTiles, movesUsed, gameplayContainer);
+          }
         }
       });
     });
@@ -214,5 +221,91 @@ document.addEventListener("DOMContentLoaded", () => {
       [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
     }
     return array;
+  }
+
+  function gameOver(numberOfTiles, movesUsed, gameplayContainer) {
+    console.log("Game Over");
+    const congratulations = document.createElement("div");
+    congratulations.className = "congratulations";
+    gameplayContainer.insertBefore(
+      congratulations,
+      gameplayContainer.firstChild
+    );
+
+    const animals = [
+      [
+        {
+          animal: "a dolphin",
+          url: "https://pbs.twimg.com/profile_images/603061085571190784/rOwJSIIi_400x400.jpg",
+        },
+        {
+          animal: "an elephant",
+          url: "https://i.ytimg.com/vi/SNggmeilXDQ/mqdefault.jpg",
+        },
+      ],
+      [
+        {
+          animal: "a turtle",
+          url: "https://media.tenor.com/D6WRzzdOHyoAAAAd/like-my-smile-turtle.gif",
+        },
+        {
+          animal: "a squirrel",
+          url: "https://media.istockphoto.com/id/104096920/photo/squirrel-holding-nuts-on-grassy-field.jpg?s=612x612&w=0&k=20&c=CkFiiKgCKmixgex4MhDjvcMYSHePrSf5MvD7LOgE2Ak=",
+        },
+      ],
+      [
+        {
+          animal: "a sloth",
+          url: "https://t3.ftcdn.net/jpg/02/87/25/08/360_F_287250814_wh4XAUalwgqlnLvCWEdTLf4C3qBPjeHW.jpg",
+        },
+        {
+          animal: "a chimpanzee",
+          url: "https://cdn.pixabay.com/photo/2018/09/25/21/32/monkey-3703230_1280.jpg",
+        },
+      ],
+    ];
+
+    // calculate result
+
+    let result = movesUsed / numberOfTiles;
+    console.log(result);
+
+    let animalCategory;
+    let textResult;
+
+    if (result <= 1) {
+      console.log("RESULT: GOOD");
+      textResult = "pretty good";
+      animalCategory = 0;
+    } else if (result > 1 && result < 1.2) {
+      console.log("RESULT: MEDIUM");
+      textResult = "pretty average";
+      animalCategory = 1;
+    } else {
+      console.log("RESULT: BAD");
+      textResult = "pretty bad";
+      animalCategory = 2;
+    }
+
+    console.log(animals[animalCategory]);
+
+    const resultText = document.createElement("div");
+    resultText.className = "result-text";
+    resultText.innerHTML = `You uncovered ${numberOfTiles} cards in ${movesUsed} moves. That is ${textResult}. You have a memory of ${
+      animals[animalCategory][
+        Math.floor(Math.random() * animals[animalCategory].length)
+      ].animal
+    }`;
+    console.log(resultText.innerHTML);
+
+    const resultImg = document.createElement("img");
+    resultImg.className = "result-img";
+    resultImg.src =
+      animals[animalCategory][
+        Math.floor(Math.random() * animals[animalCategory].length)
+      ].url;
+
+    congratulations.appendChild(resultImg);
+    congratulations.appendChild(resultText);
   }
 });

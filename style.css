@@ -199,3 +199,23 @@ body {
 .btn:hover {
   cursor: pointer;
 }
+
+.congratulations {
+  width: 85%;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto;
+}
+
+.result-text {
+    font-size: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.result-img {
+    width: 100%;
+    height: 60%;
+    border-radius: 20px;
+    object-fit: cover;
+}
